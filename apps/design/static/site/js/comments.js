@@ -69,6 +69,8 @@ initControls = function() {
                         $('#comment-answer-form-' + data.parent_id).before(dataHtml);
                         $('#comment-answer-form-' + data.parent_id + ' textarea').val('');
                         initControls();
+                    } else {
+                        $('#comment-answer-form-' + id + ' .errors').html(data.data + '<br>');
                     }
                 }
             });
@@ -90,6 +92,8 @@ initControls = function() {
                     $('#place-create-comment').attr("id", "comment_" + data.id);
                     $('#comment-create-form-id textarea').val('');
                     initControls();
+                } else {
+                    $('#comment-create-form-id .errors').html(data.data + '<br>');
                 }
             }
         });

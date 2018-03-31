@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup as bs
+from langdetect import detect
 from django import forms
 from django.utils.translation import ugettext_lazy as _ul
 
@@ -40,6 +41,9 @@ class SpamMixin(object):
         soup = bs(text, "html.parser")
         hrefs = soup.findAll('a')
         if hrefs or 'http' in text or 'https' in text or 'www' in text:
+            is_spam = True
+        lang = detect(text)
+        if lang != 'ru':
             is_spam = True
         if is_spam:
             raise forms.ValidationError(msg)

@@ -9,3 +9,4 @@ pillow==5.0.0
 sorl-thumbnail==12.4.1
 python-slugify==1.2.5
 beautifulsoup4==4.6.0
+langdetect==1.0.7

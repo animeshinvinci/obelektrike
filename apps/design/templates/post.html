@@ -124,9 +124,10 @@
                 <div class="panel-heading">
                     <h3 class="panel-title"> {% trans 'Оставить комментарий' %}</h3>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body">                    
                     <form method="POST" id="comment-create-form-id" action="{% url 'json-comment' %}">
                         {% csrf_token %}
+                        <div class="errors"></div>
                         <input type="hidden" name="post" value="{{object.id}}">
                         {% if not user.is_authenticated %}
                         <input class="form-control" maxlength="255" name="author_username" placeholder="{% trans 'Ваше имя' %}" type="text" />

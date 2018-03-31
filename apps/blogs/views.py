@@ -135,7 +135,10 @@ def comment_json(request):
             'html_data': render_to_string('comment.html', {'node': comment, 'user': request.user, 'request': request})
         })
     else:
-        return JsonResponse({'result': 'error', 'data': form.errors.as_text()})
+        return JsonResponse({
+            'result': 'error',
+            'data': form.errors.as_ul().replace('comment', 'Комментарий').replace('author_username', 'Автор')
+        })
 
 
 def comment_like(request):

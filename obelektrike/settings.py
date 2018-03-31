@@ -225,6 +225,9 @@ COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
 
+if DEBUG:
+    COMPRESS_ENABLED = False
+
 SUPPORT_EMAIL = "support@obelektrike.ru"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True

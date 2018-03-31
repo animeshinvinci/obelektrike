@@ -23,6 +23,7 @@
             <h5 class="panel-title"> {% trans 'Ответить на комментарий' %}<i class="fa fa-remove pull-right" style="cursor: pointer;" onclick="$('#comment-answer-form-{{node.id}}').hide();"></i></h5>
         </div>
         <div class="panel-body">
+            <div class="errors"></div>
             <form method="POST" action="{% url 'json-comment' %}">
                 {% csrf_token %}
                 <input type="hidden" name="post" value="{{node.post.id}}">
