@@ -13,7 +13,7 @@ ADVERT_CLASS = 'advert'
 
 @register.filter(name='advfilter')
 def advfilter(html_data):
-    soup = bs(html_data)
+    soup = bs(html_data, "html.parser")
     for i in soup.findAll('div', ADVERT_CLASS):
         i.attrs = filter(lambda x: x[0] != 'style', i.attrs)
         key = i.find(text=True)

@@ -37,7 +37,7 @@ class SpamMixin(object):
     def clean_on_spam(self, text):
         msg = _ul(u'Система пометила Ваше сообщение как спам. Возможно Вы используете ссылки или Ваше сообщение содержит спам') # noqa
         is_spam = False
-        soup = bs(text)
+        soup = bs(text, "html.parser")
         hrefs = soup.findAll('a')
         if hrefs or 'http' in text or 'https' in text or 'www' in text:
             is_spam = True
