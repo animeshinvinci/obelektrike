@@ -20,7 +20,7 @@ def production_env():
 def deploy():
     with fabric.api.cd(fabric.api.env.project_root):
         fabric.api.run('git pull origin master')
-        fabric.api.run('{pip} install -r requirements.txt'.format(pip=fabric.api.env.pip))
+        fabric.api.run('{pip} install -r requirements/prod.txt'.format(pip=fabric.api.env.pip))
         fabric.api.run('{python} manage.py initenv'.format(python=fabric.api.env.python))
         fabric.api.sudo('{uwsgi} --reload devops/wsgi.pid'.format(uwsgi=fabric.api.env.uwsgi))
 

@@ -4,7 +4,10 @@ import sys
 import environ
 
 if __name__ == "__main__":
-    environ.Env.read_env('env.dev')
+    if environ.Env().bool('DEBUG', default=False):
+        environ.Env.read_env('env.dev')
+    else:
+        environ.Env.read_env('env.prod')
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "obelektrike.settings")
     try:
         from django.core.management import execute_from_command_line
