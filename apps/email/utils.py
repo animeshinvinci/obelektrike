@@ -5,10 +5,10 @@ from apps.email.models import Email
 
 def send_mail(subject, message, from_email, recipient_list, **kwargs):
     django_send_mail(subject, message, from_email, recipient_list, **kwargs)
-    email = Email(
+    Email(
         from_email=from_email,
         to_emails=', '.join(recipient_list),
         subject=subject,
         body=message,
     )
-    email.save()
+    # email.save()
