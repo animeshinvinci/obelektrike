@@ -78,13 +78,7 @@
             {% endif %}
 
             <div class="middle-rek">
-                {% if adv_middle.data %}
-                {{adv_middle.data|safe}}
-                {% else %}
-                {% if show_adv %}
-                <img src="http://placehold.it/720x80" alt="...">
-                {% endif %}
-                {% endif %}
+                {{adv_middle|safe}}
             </div>
             
             {% block pagination %}
