@@ -1,10 +1,10 @@
 # Installation
 - `git clone ...`  
-- `cd blogs`
-- `cp main/settings.py.tmp main/settings.py`
-- `virtualenv env`
+- `cd obelektrike`
+- export envs from env.dev
+- `virtualenv env --python=python3`
 - `source env/bin/activate`
-- `(env)> pip install -r requirements.txt`
+- `(env)> pip install -r requirements/dev.txt`
 - `(env)> python manage.py initenv`
 - `(env)> python manage.py testdb`
 
