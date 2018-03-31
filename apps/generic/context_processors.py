@@ -1,21 +1,26 @@
-from django.contrib import messages
-from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
 
-from apps.blogs.models import Category
+from apps.blogs.models import Category, Post
 from apps.users.forms import SubscribeForm
+from apps.cms.models import SeoPage, Poll
 
 
 def main_context_processors(request):
     kwargs = {}
-
-    kwargs['site'] = get_current_site(request)
-    kwargs['site_profile'] = kwargs['site'].get_profile()
-    kwargs['host'] = "http://" + kwargs['site'].domain
-    kwargs['page_path'] = kwargs['host'] + request.path
-
-    if kwargs['site_profile'].important_message:
-        messages.success(request, kwargs['site_profile'].important_message, extra_tags='important')
-
-    kwargs['subscribe_form'] = SubscribeForm()
+    post_qs = Post.objects.filter(
+        is_published=True
+    )
+    kwargs['DEBUG'] = settings.DEBUG
+    kwargs['absolute_url'] = request.build_absolute_uri(location='')
+    kwargs['domain'] = request.build_absolute_uri('/')[:-1]
+    kwargs['seo_page'] = SeoPage.objects.filter(url=request.path).first()
     kwargs['categories'] = Category.objects.filter(is_published=True, categorytype=Category.CATEGORY_NONE)
+    kwargs['subscribe_form'] = SubscribeForm()
+    kwargs['comment_posts'] = post_qs.exclude(
+        category__categorytype=Category.CATEGORY_QUESTIONS
+    ).filter(num_comments__gte=1).order_by('-modification_date', '-num_comments')[:5]
+    kwargs['poll'] = Poll.objects.filter(is_published=True).first()
+    kwargs['question_posts'] = post_qs.filter(
+        category__categorytype=Category.CATEGORY_QUESTIONS
+    ).order_by('-modification_date')[:5]
     return kwargs

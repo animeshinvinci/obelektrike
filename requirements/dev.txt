@@ -2,3 +2,4 @@
 -r test.txt
 
 fabric3==1.14.post1
+ipdb==0.11

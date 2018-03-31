@@ -6,6 +6,17 @@
 {% load thumbnail %}
 {% load adv_tags %}
 
+{% block meta %}
+    <title>{{object.seo_title}}</title>
+    <meta property="og:title" content="{{object.seo_title}}" />
+    <meta name="description" content="{{object.seo_description}}">
+    <meta property="og:description" content="{{object.seo_description}}" />
+    <meta name="keywords" content="{{object.seo_keywords}}">
+    <meta name="author" content="{{object.seo_author}}">
+    <link rel="image_src" href="{{domain}}{{object.picture.url}}" />
+    <meta property="og:image" content="{{domain}}{{object.picture.url}}" />
+{% endblock %}
+
 
 {% block breadcrumb %}
 <div class="container">
@@ -98,7 +109,6 @@
                 {{adv_middle.data|safe}}
                 <br>
             </div>
-            {% include 'instead_adv.html' with w=750 h=80 %}
 
             <ul class="media-list">
                 {% recursetree comments %}

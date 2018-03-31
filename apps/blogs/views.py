@@ -4,8 +4,6 @@ from django.http import Http404, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext as _u
-from django.utils.translation import ugettext_lazy as _ul
 from django.views.generic import DetailView, ListView, TemplateView
 
 from apps.blogs.forms import CommentForm
@@ -14,6 +12,18 @@ from apps.blogs.models import Category, Comment, Post
 
 class IndexView(TemplateView):
     template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        post_qs = Post.objects.filter(
+            is_published=True
+        )
+        kwargs['new_posts'] = post_qs.exclude(
+            category__categorytype=Category.CATEGORY_QUESTIONS
+        )[:5]
+        kwargs['practic_posts'] = post_qs.filter(
+            category__categorytype=Category.CATEGORY_PRACTICS
+        )[:5]
+        return kwargs
 
 
 class PostSearchListView(TemplateView):
@@ -34,21 +44,6 @@ class PostListView(ListView):
         qs = super(PostListView, self).get_queryset()
         return qs.filter(is_published=True).exclude(category__categorytype=Category.CATEGORY_QUESTIONS)
 
-    def get_context_data(self, **kwargs):
-        kwargs = super(PostListView, self).get_context_data(**kwargs)
-        page_obj = kwargs.get('page_obj', None)
-        prev_page = None
-        next_page = None
-        baseurl = self.request.build_absolute_uri(location='')
-        if page_obj is not None:
-            prev_page = page_obj.previous_page_number() if page_obj.has_previous() else None
-            next_page = page_obj.next_page_number() if page_obj.has_next() else None
-        if prev_page:
-            kwargs['meta_prev'] = baseurl + '?page=%s' % prev_page
-        if next_page:
-            kwargs['meta_next'] = baseurl + '?page=%s' % next_page
-        return kwargs
-
 
 class PostChoicesListView(PostListView):
     template_name = 'post-choices-list.html'
@@ -67,16 +62,6 @@ class PostChoicesListView(PostListView):
             return qs.order_by('-num_comments')
         return qs.none()
 
-    def get_context_data(self, **kwargs):
-        kwargs = super(PostChoicesListView, self).get_context_data(**kwargs)
-        if self.is_last:
-            kwargs['title'] = _ul(u'Последние статьи')
-        if self.is_populate:
-            kwargs['title'] = _ul(u'Популярные статьи')
-        if self.is_commented:
-            kwargs['title'] = _ul(u'Комментируемые статьи')
-        return kwargs
-
 
 class PostCategoryListView(PostListView):
     template_name = 'post-category-list.html'
@@ -87,10 +72,6 @@ class PostCategoryListView(PostListView):
         if category is None:
             raise Http404
         kwargs['category'] = category
-        kwargs['meta_title'] = '%s | %s' % (category.seo_title, _u(u'страница %s') % self.request.GET.get('page', 1))
-        kwargs['meta_keywords'] = category.seo_keywords
-        kwargs['meta_description'] = category.seo_description
-        kwargs['meta_author'] = category.seo_author
         return kwargs
 
     def get_queryset(self):
@@ -116,11 +97,6 @@ class PostCategoryDetailView(DetailView):
         ).exclude(id=self.object.id)[:5]
         kwargs['comments'] = self.object.comments()
         kwargs['comment_form'] = CommentForm(user=self.request.user)
-        kwargs['meta_title'] = self.object.seo_title
-        kwargs['meta_keywords'] = self.object.seo_keywords
-        kwargs['meta_description'] = self.object.seo_description
-        kwargs['meta_author'] = self.object.seo_author
-        kwargs['meta_image'] = self.object.picture.url if self.object.picture else None
         return kwargs
 
 

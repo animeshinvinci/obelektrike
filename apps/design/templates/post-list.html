@@ -4,6 +4,17 @@
 {% load thumbnail %}
 
 
+{% block meta %}
+    {{block.super}}
+    {% if page_obj.has_previous %}
+    <link rel="prev" href="{{absolute_url}}?page={{page_obj.previous_page_number}}">
+    {% endif %}
+    {% if page_obj.has_next %}
+    <link rel="next" href="{{absolute_url}}?page={{page_obj.next_page_number}}">
+    {% endif %}
+{% endblock %}
+
+
 {% block breadcrumb %}
 <div class="container">
   <ol class="breadcrumb">
@@ -75,7 +86,6 @@
                 {% endif %}
                 {% endif %}
             </div>
-            {% include 'instead_adv.html' with w=720 h=80 %}
             
             {% block pagination %}
             {% if page_obj.paginator.num_pages > 1 %}

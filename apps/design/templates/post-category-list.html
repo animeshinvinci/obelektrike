@@ -2,6 +2,23 @@
 {% load i18n %}
 
 
+{% block meta %}
+    <title>{{category.seo_title}}</title>
+    <meta property="og:title" content="{{category.seo_title}}" />
+    <meta name="description" content="{{category.seo_description}}">
+    <meta property="og:description" content="{{category.seo_description}}" />
+    <meta name="keywords" content="{{category.seo_keywords}}">
+    <meta name="author" content="{{category.seo_author}}">
+    <link rel="image_src" href="{{category.seo_image}}" />
+    <meta property="og:image" content="{{category.seo_image}}" />
+    {% if page_obj.has_previous %}
+    <link rel="prev" href="{{absolute_url}}?page={{page_obj.previous_page_number}}">
+    {% endif %}
+    {% if page_obj.has_next %}
+    <link rel="next" href="{{absolute_url}}?page={{page_obj.next_page_number}}">
+    {% endif %}
+{% endblock %}
+
 {% block panel-heading %}
 <h1 class="panel-title"><span class="fa fa-bars"></span> {{category.name}}</h1>
 {% endblock %}
