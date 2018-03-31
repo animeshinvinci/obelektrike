@@ -1,0 +1,454 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load compress %}
+{% load blogs_tags %}
+{% load thumbnail %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <!--[if lt IE 9]>
+            <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        {% if meta_canonical %}
+        <link rel="canonical" href="{{meta_canonical}}" />
+        <meta property="og:url" content="{{meta_canonical}}" />
+        {% endif %}
+
+        {% if meta_prev %}
+        <link rel="prev" href="{{meta_prev}}">
+        {% endif %}
+
+        {% if meta_next %}
+        <link rel="next" href="{{meta_next}}">
+        {% endif %}
+
+        {% if meta_title %}
+        <title>{{meta_title}}</title>
+        <meta property="og:title" content="{{meta_title}}" />
+        {% endif %}
+
+        {% if meta_description %}
+        <meta name="description" content="{{meta_description}}">
+        <meta property="og:description" content="{{meta_description}}" />
+        {% endif %}
+
+        {% if meta_keywords %}
+        <meta name="keywords" content="{{meta_keywords}}">
+        {% endif %}
+
+        {% if meta_author %}
+        <meta name="author" content="{{meta_author}}">
+        {% endif %}
+
+        {% if meta_image %}
+        <link rel="image_src" href="{{meta_image}}" />
+        <meta property="og:image" content="{{meta_image}}" />
+        {% endif %}
+
+        {% if meta_yandex_verification %}
+        <meta name='yandex-verification' content='{{meta_yandex_verification}}' />
+        {% endif %}
+
+        {% if meta_google_verification %}
+        <meta name="google-site-verification" content="{{meta_google_verification}}" />
+        {% endif %}
+
+        <link rel="shortcut icon" href="{{STATIC_URL}}/favicon.ico" type="image/x-icon" alt="об электрике">
+
+        {% compress css %}
+        <link type="text/css" rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" media="screen">
+        <link type="text/css" rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}" media="screen">
+        <link type="text/css" rel="stylesheet" href="{% static 'select2/css/select2.min.css' %}" media="screen">
+        <link type="text/css" rel="stylesheet" href="{% static 'site/css/styles.css' %}" media="screen">
+        {% endcompress %}
+
+        {% block css_extra %}
+        {% endblock %}
+    </head>
+    <body>
+        {% if meta_stat_yandex %}
+            {{meta_stat_yandex|safe}}
+        {% endif %}
+        {% if meta_stat_google %}
+            {{meta_stat_google|safe}}
+        {% endif %}
+
+        <div class="jumbotron jumbotron-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 logo">
+                        <a href="{% url 'index' %}"><img class="media-object logo-header pull-left" src="{% static 'site/img/logo-header.png' %}" width="350" height="80" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+                    </div>
+                    <div class="col-lg-4">
+                        <img class="top-image" src="{% static 'site/img/lamp.png' %}">
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="add-favorite">
+                            <a href="#" onclick="return addFavorite(this);">{% trans 'Добавить в закладки' %}</a> <span class="bookmark fa fa-bookmark fa-2x"></span>
+                        </div>
+                        <div class="search">
+                            <div class="ya-site-form ya-site-form_inited_no" onclick="return {'action':'http://obelektrike.ru/poisk/','arrow':false,'bg':'#2491d0','fontsize':15,'fg':'#000000','language':'ru','logo':'rb','publicname':'Yandex Site Search #2280698','suggest':true,'target':'_self','tld':'ru','type':2,'usebigdictionary':true,'searchid':2280698,'input_fg':'#000000','input_bg':'#ffffff','input_fontStyle':'normal','input_fontWeight':'normal','input_placeholder':'поиск по сайту','input_placeholderColor':'#000000','input_borderColor':'#2491d0'}">
+                                <form action="https://yandex.ru/search/site/" method="get" target="_self" accept-charset="utf-8">
+                                    <input type="hidden" name="searchid" value="2280698"/>
+                                    <input type="hidden" name="l10n" value="ru"/>
+                                    <input type="hidden" name="reqenc" value=""/>
+                                    <input type="search" name="text" value=""/>
+                                    <input type="submit" value="Найти"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-default navbar-head" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <a href="{% url 'index' %}" class="navbar-mob"><img src="{% static 'site/img/logo-header.png' %}" width="230" height="60" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-header">
+                        <span class="sr-only"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-navbar-collapse-header">
+                    <ul class="nav navbar-nav">
+                        {% for category in categories %}
+                        <li>
+                            <a href="{% url 'posts-category-list' category.slug %}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% comment %}
+                        <li>
+                            <a href="{% url 'index' %}1/topic/add/" class="inverse">
+                                <span class="fa fa-question"></span> {% trans 'Задать вопрос' %}
+                            </a>
+                        </li>
+                        {% endcomment %}
+                        {% if request.user.is_authenticated %}
+                        {% if request.user.is_staff %}
+                        <li>
+                            <a href="{% url 'admin:index' %}">
+                                <span class="fa fa-database"></span> {% trans 'Администрирование' %}
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle href-js" data-toggle="dropdown">
+                                {{request.user.get_full_name}}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{% url 'u-comments-list' %}">
+                                        <span class="fa fa-comment"></span> {% trans 'Мои сообщения на сайте' %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'u-profile' request.user.pk %}">
+                                        <span class="fa fa-user"></span> {% trans 'Профайл' %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'u-password' %}">
+                                        <span class="fa fa-cog"></span> {% trans 'Изменить пароль' %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'u-logout' %}">
+                                        <span class="fa fa-sign-in"></span> {% trans 'Выйти' %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'u-login' %}">
+                                <span class="fa fa-sign-in"></span> {% trans 'Войти' %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'u-registration' %}">
+                                <span class="fa fa-rocket"></span> {% trans 'Регистрация' %}
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        {% block menu %}
+        {% endblock %}
+
+        <div class="bg-header-line">
+        </div>
+
+        {% block breadcrumb %}
+        {% endblock %}
+
+      <!-- HEADER
+      =================================-->
+
+
+      <!-- /header container-->
+
+      <!-- CONTENT
+      =================================-->
+        <div class="container">
+            {% block content %}
+            {% include 'alert.html' with extra_tag='important' %}
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row menu">
+                        <div class="col-lg-12">
+                            <a href="{% url 'posts-last-list' %}" class="btn btn-default menu-item">{% trans 'Последние статьи' %}</a>
+                            <a href="{% url 'posts-popular-list' %}" class="btn btn-default menu-item">{% trans 'Популярные статьи' %}</a>
+                            <a href="{% url 'posts-commented-list' %}" class="btn btn-default menu-item">{% trans 'Комментируемые статьи' %}</a>
+                            <a href="{% url 'posts-category-list' 'praktika' %}" class="btn btn-default menu-item">{% trans 'Практика' %}</a>
+                            {% comment %}
+                            <a href="{% url 'index' %}" class="btn btn-default menu-item">{% trans 'Бесплатная помощь' %}</a>
+                            {% endcomment %}
+                        </div>
+                    </div>
+
+                    <div class="top-rek">
+                        {{adv_top.data|safe}}
+                    </div>
+                    {% include 'instead_adv.html' with w=750 h=80 %}
+
+                    {% block central-content %}
+                    {% endblock %}
+                </div>
+                <div class="col-sm-4 right-content">
+                    {% block right-content %}
+
+                    {% if not user.is_authenticated or not user.is_subscribe %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        {% include 'alert.html' with extra_tag='subscribe' %}
+                        <form role="search" method="POST" action="{% url 'subscribe-user' %}?next={{request.path}}">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                {{subscribe_form.email}}
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary"> {% trans 'Подписаться' %}</button>
+                                </span>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="right-rek">
+                        {{adv_right.data|safe}}
+                    </div>
+                    {% include 'instead_adv.html' with w=360 h=250 %}
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title"><span class="fa fa-comments-o"></span> <a href="{% url 'posts-commented-list' %}">{{comment_posts.title}}</a></h2>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="media-list">
+                                {% for post in comment_posts.posts %}
+                                <li class="media">
+                                    <div class="media-body">
+                                      <h3 class="media-heading media-heading-right"><a href="{% url 'posts-category-detail' post.slug %}">{{post.title}} ({{post.comments.count}})</a></h3>
+                                    </div>
+                                    <hr>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h2 class="panel-title"><span class="fa fa-question-circle"></span> {{poll.poll.question}}</h2>
+                        </div>
+                        <div class="panel-body">
+                          <div class="progress-data" {% if poll.poll|pollitem_vote:request %}style="display:none;"{% endif %}>
+                              {% for poll_item in poll.poll.items.all %}
+                              {{poll_item.answer}}
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{poll_item.rate}}" aria-valuemin="0" aria-valuemax="100" style="width: {{poll_item.rate_percentage}}%">
+                                  <span class="sr-only">{{poll_item.rate_percentage}}%</span> {{poll_item.rate}} {% trans 'чел.' %}
+                                </div>
+                              </div>
+                              {% endfor %}
+                          </div>
+                          <div class="poll-data" {% if not poll.poll|pollitem_vote:request %}style="display:none;"{% endif %}>
+                            {% for poll_item in poll.poll.items.all %}
+                            <span class="poll-item" data="{{poll_item.pk}}"><span class="fa fa-circle-o"></span> {{poll_item.answer}}</span>
+                            <br>
+                            <br>
+                            {% endfor %}
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title"><span class="fa fa-user"></span> <a href="{% url 'posts-category-list' 'voprosy' %}">{{question_posts.title}}</a></h2>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="media-list">
+                            {% for post in question_posts.posts %}
+                                <li class="media">
+                                    <div class="media-body">
+                                        <h3 class="media-heading media-heading-right"><a href="{% url 'posts-category-detail' post.slug %}">{{post.title}}</a></h3>
+                                    </div>
+                                    <hr>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="bottom-right"></div>
+
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                {% block bottom-content %}
+                {% endblock %}
+                </div>
+            </div>
+          {% endblock %}
+      </div>
+      <!-- /CONTENT ============-->
+
+        <nav class="navbar navbar-default navbar-footer" role="navigation">
+          <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                {% comment %}
+                <a href="{% url 'advertisers' %}" class="btn btn-default navbar-mob-btn"> {% trans 'Рекламодателям' %}</a>
+                {% endcomment %}
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-footer">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-navbar-collapse-footer">
+                <ul class="nav navbar-nav">
+                  <li><a href="{% url 'feedback' %}">{% trans 'Контакт с администрацией' %}</a></li>
+                  <li><a href="{% url 'advertisers' %}">{% trans 'Рекламодателям' %}</a></li>
+                  <li><a href="{% url 'rules' %}">{% trans 'Правила и авторские права' %}</a></li>
+                  <li><a href="{% url 'sitemap-html' %}">{% trans 'Карта сайта' %}</a></li>
+                  <li><a href="{% url 'feed' %}"><span class="fa fa-rss"></span></a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+
+        <div class="jumbotron jumbotron-footer">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-4">
+                  <img class="media-object logo-footer pull-left" src="{% static 'site/img/logo-footer.png' %}" width="80" height="80"  alt="{% trans 'Электропроводка в доме и квартире своими руками' %}">
+                  <br>
+                  © {% now "Y" %} {{site.domain}} - {% trans 'лучший интернет-портал об электрике в домашних условиях' %}
+                  <br>
+                  {% trans 'для связи' %} <a href="mailto:support@obelektrike.ru">support@obelektrike.ru</a> 
+                </div>
+                <div class="col-lg-4">
+                  {% trans 'Все текстовые и графические материалы, размещенные на сайте, являются собственностью редакции. Копирование их допускается только при использовании активной ссылки на этот сайт.' %}
+                </div>
+                <div class="col-lg-4">
+                  {% comment %}
+                  <!--noindex-->
+                  <script type="text/javascript" src="{% static 'site/js/orphus.js' %}"></script>
+                  <a href="http://orphus.ru" id="orphus" rel="nofollow" target="_blank" title="{% trans 'Система Orphus' %}">
+                  <img alt="{% trans 'Система Orphus' %}" src="{% static 'site/img/orphus.gif' %}" border="0" width="237" height="48" /></a>
+                  <!--/noindex-->
+                  <br>
+                  <br>
+                  {% endcomment %}
+                  <div>
+                  <!--noindex-->
+                  {% if meta_stat_liveinternet %}
+                      {{meta_stat_liveinternet|safe}}
+                  {% endif %}
+                  <!--/noindex-->
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="bg-footer-line">
+        </div>
+
+        {{ form.media }}
+        
+        <script type="text/javascript">
+          var likePostUrl = "{% url 'json-post-like' %}";
+          var unlikePostUrl = "{% url 'json-post-unlike' %}";
+          var likeCommentUrl = "{% url 'json-comment-like' %}";
+          var unlikeCommentUrl = "{% url 'json-comment-unlike' %}";
+          var voteUrl = "{% url 'json-cms-vote' %}";
+          var isUserAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+        </script>
+
+        {% compress js %}
+        <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'select2/js/select2.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'select2/js/i18n/ru.js' %}"></script>
+        <script type="text/javascript" src="{% static 'site/js/csrf.js' %}"></script>
+        <script type="text/javascript" src="{% static 'site/js/site.js' %}"></script>
+        <script type="text/javascript" src="{% static 'site/js/likes.js' %}"></script>
+        <script type="text/javascript" src="{% static 'site/js/vote.js' %}"></script>
+        {% endcompress %}
+
+        <script type="text/javascript">
+            (function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1){e.className+=' ya-page_js_yes';}s.type='text/javascript';s.async=true;s.charset='utf-8';s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){Ya.Site.Form.init()})})(window,document,'yandex_site_callbacks');
+        </script>
+
+        <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script type="text/javascript">
+            $(".adsbygoogle").each(function () { (adsbygoogle = window.adsbygoogle || []).push({}); })
+        </script>
+
+        {% comment %}
+        <script type="text/javascript">
+          var adblock = true;
+        </script>
+        <script type="text/javascript" src="{% static 'site/js/adframe.js' %}"></script>
+        <script type="text/javascript">
+            if(adblock) {
+                $('.instead').show();
+            } else {
+                $('.instead').hide();
+            }
+        </script>
+        {% endcomment %}
+
+        {% block js_extra %}
+        {% endblock %}
+        
+    </body>
+</html>

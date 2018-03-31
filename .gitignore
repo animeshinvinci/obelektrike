@@ -1,0 +1,15 @@
+*.pyc
+*.sqlite
+*.sqlite3
+*.log
+*.mo
+*.pyo
+*.pid
+*.gz
+
+.DS_Store
+
+/backup
+/media
+/static
+/env

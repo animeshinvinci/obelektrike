@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load blogs_tags %}
+
+
+<div class="media-footer">
+    <div class="btn-group pull-left btn-group-xs" role="group" >
+      <a class="btn btn-default comments" href="{% url 'posts-category-detail' object.slug %}#comments"><i class="fa fa-comments fa-lg"></i></a>
+      <span class="btn btn-default">{{object.num_comments}}</span>
+    </div>
+    <div class="btn-group pull-right btn-group-xs" role="group" >
+      <span class="btn btn-default unlike {% if object|post_like:request %}unlike-post-action{% endif %}" data="{{object.id}}"><i class="fa fa-thumbs-o-down fa-lg"></i></span>
+      <span class="btn btn-default like-rate">{% if object.rate > 0 %}+{% endif %}{{object.rate}}</span>
+      <span class="btn btn-default like {% if object|post_like:request %}like-post-action{% endif %}" data="{{object.id}}"><i class="fa fa-thumbs-o-up fa-lg"></i></span>
+    </div>
+</div>
+<br>

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load blogs_tags %}
+
+
+{% block breadcrumb %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">{% trans 'Главная' %}</a></li>
+    <li class="active">{% trans 'Мои комментарии' %}</li>
+  </ol>
+</div>
+{% endblock %}
+
+
+{% block central-content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% block panel-heading %}
+            <h1 class="panel-title"><span class="fa fa-comments"></span> {% trans 'Мои комментарии' %} </h1>
+            {% endblock %}
+            {% if page_obj.number > 1 %}<span class="pull-right page-number-title"><span class="fa fa-list-ul"></span> {% trans 'страница' %} {{page_obj.number}}</span>{% endif %}
+        </div>
+        <div class="panel-body">
+            {% if object_list.count == 0 %}
+                {% block no-data %}
+                {% trans 'Нет комментариев' %}   
+                {% endblock %}            
+            {% else %}
+            <ul class="media-list">
+                {% for node in object_list %}
+                <li class="media" id="comment_{{node.pk}}">
+                    <div class="media-body">
+                        {{node.comment|safe}}
+                        <br>
+                        <a href="{% url 'posts-category-detail' node.post.slug %}#comment_{{node.pk}}">на статью</a>
+                    </div>
+                    <hr>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            
+            {% if page_obj.paginator.num_pages > 1 %}
+            <ul class="pagination">
+                {% for num_page in page_obj.paginator.num_pages|xrange %}
+                <li class="{% if num_page == page_obj.number %}active{% endif %}"><a href="?page={{num_page}}">{{num_page}}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

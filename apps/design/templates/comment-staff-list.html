@@ -1,0 +1,18 @@
+{% extends 'comment-list.html' %}
+{% load i18n %}
+{% load blogs_tags %}
+
+
+{% block breadcrumb %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="{% url 'index' %}">{% trans 'Главная' %}</a></li>
+    <li class="active">{% trans 'Последние комментарии без ответа' %}</li>
+  </ol>
+</div>
+{% endblock %}
+
+
+{% block panel-heading %}
+<h1 class="panel-title"><span class="fa fa-comments"></span> {% trans 'Последние комментарии без ответа' %} </h1>
+{% endblock %}

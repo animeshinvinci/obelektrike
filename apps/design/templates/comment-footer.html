@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load blogs_tags %}
+
+
+<div class="media-footer">
+    {% if not object.is_deleted %}
+    <div class="btn-group pull-right btn-group-xs" role="group" >
+      <span class="btn btn-default unlike {% if object|comment_like:request %}unlike-comment-action{% endif %}" data="{{object.id}}"><i class="fa fa-thumbs-o-down fa-lg"></i></span>
+      <span class="btn btn-default like-rate">{% if object.rate > 0 %}+{% endif %}{{object.rate}}</span>
+      <span class="btn btn-default like {% if object|comment_like:request %}like-comment-action{% endif %}" data="{{object.id}}"><i class="fa fa-thumbs-o-up fa-lg"></i></span>
+    </div>
+    {% endif %}
+</div>
+<br>

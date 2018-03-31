@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block central-content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title"><span class="fa fa-rocket"></span> {{material.title}}</h1>
+        </div>
+        <div class="panel-body">
+            {{material.page|safe}}
+            <form method="post">
+                {% csrf_token %}
+                {% include 'alert.html' %}
+                {% for field in form %}
+                    <label id='id_label_{{field.name}}' class="form-label">{{field.label}}</label>
+                    {{field.errors}}
+                    {{field}}
+                {% endfor %}
+                <button type="submit" class="btn btn-primary pull-right submit">{% trans 'Зарегистрироваться' %}</button>
+            </form> 
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load thumbnail %}
+
+
+{% block menu %}
+    {{block.super}}
+    <div class="container menu-container">
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-lg-2">
+                <a href="{% url 'posts-category-list' category.slug %}" class="thumbnail">
+                    <div class="menu-container-item {{category.image_class}}"></div>
+                    <div class="caption centered-text">
+                        {{category.name}}
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block central-content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title"><span class="fa fa-bars"></span> {{new_posts.title}}</h2>
+        </div>
+        <div class="panel-body">
+            {{new_posts.data|safe}}
+            <ul class="media-list">
+                {% for post in new_posts.posts %}
+                <li class="media">
+                    <div class="media-body">
+                        <div class="pull-left">
+                            {% thumbnail post.picture "170x170" crop="center" as thumb_img %}
+                                <img class="media-object" src="{{thumb_img.url}}" alt="{{post.title}}">
+                            {% endthumbnail %}
+                        </div>
+                        <h3 class="media-heading media-heading-left"><a href="{% url 'posts-category-detail' post.slug %}">{{post.title}}</a></h3>
+                        {% include 'post-header.html' with object=post %}
+                        {{post.announcement|safe}}
+                    </div>
+                    {% include 'post-footer.html' with object=post %}
+                    <hr>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="middle-rek">
+        {{adv_middle.data|safe}}
+        <br>
+    </div>
+    {% include 'instead_adv.html' with w=750 h=80 %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title"><span class="fa fa-bars"></span> {{practic_posts.title}}</h2>
+        </div>
+        <div class="panel-body">
+            {{practic_posts.data|safe}}
+            <ul class="media-list">
+                {% for post in practic_posts.posts %}
+                <li class="media">
+                    <div class="media-body">
+                        <div class="pull-left">
+                            {% thumbnail post.picture "170x170" crop="center" as thumb_img %}
+                                <img class="media-object" src="{{thumb_img.url}}" alt="{{post.title}}">
+                            {% endthumbnail %}
+                        </div>
+                        <h3 class="media-heading media-heading-left"><a href="{% url 'posts-category-detail' post.slug %}">{{post.title}}</a></h3>
+                        {% include 'post-header.html' with object=post %}
+                        {{post.announcement|safe}}
+                    </div>
+                    {% include 'post-footer.html' with object=post %}
+                    <hr>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block bottom-content %}
+    <div class="panel panel-default about">
+        <div class="panel-heading">
+            <h2 class="panel-title"><span class="fa fa-globe"></span> {{about.title}}</h2>
+        </div>
+        <div class="panel-body">
+            {{about.data|safe}}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% load i18n %}
+
+<div class="media-body">
+    {% if node.author %}
+    <img class="media-object" src="{{node.author.avatar.url}}" alt="{{node.author.get_full_name}}" width="70" height="70">
+    {% else %}
+    <img class="media-object" src="/media/defaults/user.jpeg" alt="Аватар пользователя" width="70" height="70">
+    {% endif %}
+    {% include "comment-header.html" with object=node %}
+    {% if not node.is_deleted %}
+        {{node.comment|safe}}
+    {% else %}
+        {% trans 'Сообщение было удалено' %}
+    {% endif %}
+</div>
+{% include "comment-footer.html" with object=node %}
+<hr>
+
+<div id="comment-answer-form-{{node.id}}" class="comment-answer-form" style="display:none;">
+    <br>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title"> {% trans 'Ответить на комментарий' %}<i class="fa fa-remove pull-right" style="cursor: pointer;" onclick="$('#comment-answer-form-{{node.id}}').hide();"></i></h5>
+        </div>
+        <div class="panel-body">
+            <form method="POST" action="{% url 'json-comment' %}">
+                {% csrf_token %}
+                <input type="hidden" name="post" value="{{node.post.id}}">
+                <input type="hidden" name="parent" value="{{node.id}}">
+                {% if not user.is_authenticated %}
+                <input class="form-control" maxlength="255" name="author_username" placeholder="{% trans 'Ваше имя' %}" type="text" />
+                <br>
+                {% endif %}
+                <textarea class="form-control ckeditor" cols="40" rows="10" name="comment" placeholder="{% trans 'Ваш комментарий' %}"></textarea>
+                <button type="submit"  class="btn btn-primary pull-right comment-answer submit">{% trans 'Ответить' %}</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if not node.is_leaf_node %}
+<ul class="media-list child">
+    {{ children }}
+</ul>
+{% endif %}

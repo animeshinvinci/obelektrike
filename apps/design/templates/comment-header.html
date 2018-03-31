@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load humanize %}
+
+<div class="media-header">
+    <span class="media-header-item"><i class="fa fa-user"></i> 
+        {% if object.author %}
+            <a href="{% url 'u-profile' object.author.pk %}">{{object.author.get_full_name}}</a>
+        {% else %}
+            {{object.author_username}}
+        {% endif %}
+    </span>
+    <span class="media-header-item"><i class="fa fa-calendar"></i> {{object.creation_date|naturaltime}}</span>
+    {% if user.is_staff %}
+    <span class="media-header-item">
+        &nbsp;<a href="{{object.get_absolute_url}}"><i class="fa fa-link"></i></a>
+        &nbsp;<a href="/u/admin/blogs/comment/{{object.pk}}/"><i class="fa fa-cog"></i></a>
+    </span>
+    {% endif %}
+
+    <div class="btn-group pull-right btn-group-xs" role="group">
+        {% if not object.is_deleted %}
+        <span class="btn btn-default comment-answer-show" data="{{object.id}}"><i class="fa fa-reply"></i> {% trans 'ответить' %}</span>
+        {% endif %}
+    </div>
+</div>

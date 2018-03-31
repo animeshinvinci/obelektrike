@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block central-content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans 'Ошибка 500' %}</h3>
+        </div>
+        <div class="panel-body">
+            {% trans 'Ошибка сервера. Обратитесь в службу поддержки.' %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block right-content %}
+{% endblock %}

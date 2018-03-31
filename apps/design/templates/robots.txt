@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /media/
+Disallow: /u/
+Disallow: /json/
+Allow: /media/defaults/user.jpeg
+Allow: /media/uploads/posts/
+Allow: /media/users/
+Allow: /media/cache/
+Sitemap: http://obelektrike.ru/sitemap.xml
+Host: obelektrike.ru

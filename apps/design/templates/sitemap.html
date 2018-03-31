@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block central-content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title"><span class="fa fa-sitemap"></span> {% trans 'Карта сайта' %}</h1>
+        </div>
+        <div class="panel-body">
+            <ul>
+              {% for url in urlset %}
+                {% if url.type == 'static' %}
+                <li>
+                   <a href="{{ url.location }}">{% trans 'Главная' %}</a>
+                 </li>
+                {% endif %}
+              {% endfor %}
+              {% for url in urlset %}
+                {% if url.type == 'category' %}
+                <li>
+                    <a href="{{ url.location }}">{{ url.item.name }}</a>
+                    <ul>
+                    {% for suburl in urlset %}
+                      {% if suburl.type == 'post' and suburl.item.category == url.item  %}
+                      <li>
+                        <a href="{{ suburl.location }}">{{ suburl.item.title }}</a>
+                        <br>
+                        {{ suburl.item.seo_description }}
+                      </li>
+                      {% endif %}
+                    {% endfor %}
+                    </ul>
+                 </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block right-content %}
+{% endblock %}

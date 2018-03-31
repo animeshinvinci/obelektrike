@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block central-content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="fa fa-user"></span> {% trans 'Профиль пользователя' %} "{{object.get_full_name}}"</h3>
+        </div>
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-body">
+                    <div class="media-header">
+                        {% if user.is_authenticated %}
+                            {% if request.user == object or request.user.is_staff %}
+                                <span class="media-header-item pull-right"> <a href="{% url 'u-update' object.pk %}"><i class="fa fa-cog"></i></a></span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <img class="media-object" src="/media/{{object.avatar}}" width="100" height="100" alt="{% trans 'аватар пользователя' %}">
+                        </div>
+                        <div class="col-lg-10">
+                            {% if object.about %}
+                            {{object.about|safe}}
+                            {% endif %}
+
+                            {% if request.user == object or request.user.is_staff %}
+                            <ul>
+                                <li><a href="https://webmaster.yandex.ru/site/service-plugin.xml?host=22600389&service=ORIGINALS&need_auth=false&new_site=false">YANDEX_ORIGINALS</a></li>
+                                <li><a href="https://webmaster.yandex.ru/site/?host=22600389">YANDEX_WEBMASTER</a></li>
+                                <li><a href="https://metrika.yandex.ru/list/">YANDEX_METRIKA</a></li>
+                                <li><a href="https://www.google.com/webmasters/tools/dashboard?hl=ru&siteUrl=http://obelektrike.ru/">GOOGLE_WEBMASTER</a></li>
+                                <li><a href="https://www.google.com/analytics/web/">GOOGLE_ANALYTICS</a></li>
+                                <li><a href="https://www.google.com/adsense/app?hl=ru#main/home">GOOGLE_ADSENSE</a></li>
+                                <li><a href="https://gogetlinks.net/my_campaigns.php?faction=change_status">GOGETLINKS</a></li>
+                                <li><a href="https://reg.2domains.ru/domains/">TWODOMAINS</a></li>
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

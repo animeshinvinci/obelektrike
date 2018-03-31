@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load humanize %}
+
+<div class="media-header">
+    <span class="media-header-item"><i class="fa fa-user"></i> <a href="{% url 'u-profile' object.author.pk %}">{{object.author.get_full_name}}</a></span>
+    <span class="media-header-item"><i class="fa fa-sitemap"></i> <a href="{% url 'posts-category-list' object.category.slug %}">{{object.category.name}}</a></span>
+    {% if object.is_published %}
+    <span class="media-header-item"><i class="fa fa-eye"></i> {{object.view_count}}</span>
+    {% endif %}
+
+    {% if request.user.is_authenticated and request.user.is_staff%}
+        <span class="media-header-item pull-right"> 
+            <a href="{% url 'admin:blogs_post_change' object.pk %}">
+                <i class="fa fa-cog"></i>
+            </a>
+        </span>
+    {% endif %}
+</div>
