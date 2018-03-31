@@ -6,10 +6,9 @@
 {% block central-content %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h1 class="panel-title"><span class="fa fa-rocket"></span> {{material.title}}</h1>
+            <h1 class="panel-title"><span class="fa fa-rocket"></span> {% trans 'Регистрация' %}</h1>
         </div>
         <div class="panel-body">
-            {{material.page|safe}}
             <form method="post">
                 {% csrf_token %}
                 {% include 'alert.html' %}

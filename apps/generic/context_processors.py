@@ -3,6 +3,7 @@ from django.conf import settings
 from apps.blogs.models import Category, Post
 from apps.users.forms import SubscribeForm
 from apps.cms.models import SeoPage, Poll
+from apps.advert.models import Advert
 
 
 def main_context_processors(request):
@@ -23,4 +24,7 @@ def main_context_processors(request):
     kwargs['question_posts'] = post_qs.filter(
         category__categorytype=Category.CATEGORY_QUESTIONS
     ).order_by('-modification_date')[:5]
+
+    for advert in Advert.objects.all():
+        kwargs[advert.key] = advert.content
     return kwargs
