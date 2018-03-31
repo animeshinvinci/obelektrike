@@ -17,7 +17,7 @@ class SeoPage(GenericSeoModel):
         verbose_name_plural = _ul('Страницы')
 
     def __str__(self):
-        return u'%s' % self.title
+        return u'%s' % self.url
 
 
 class Poll(GenericDateModel):
