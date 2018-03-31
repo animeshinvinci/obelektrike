@@ -34,11 +34,15 @@ urlpatterns = [
         name='feedback'),
     re_path(
         r'^reklamodatelyam/$',
-        cms_views.FlatPageDetailView.as_view(),
+        cms_views.FlatPageDetailView.as_view(
+            template_name='advertisers.html'
+        ),
         name='advertisers'),
     re_path(
         r'^pravila-i-avtorskie-prava/$',
-        cms_views.FlatPageDetailView.as_view(),
+        cms_views.FlatPageDetailView.as_view(
+            template_name='rules.html'
+        ),
         name='rules'),
 
     re_path(
