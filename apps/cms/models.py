@@ -7,7 +7,7 @@ from apps.generic.models import GenericSeoModel, GenericDateModel
 
 class SeoPage(GenericSeoModel):
     url = models.CharField(
-        verbose_name=_ul('Тип страницы'),
+        verbose_name=_ul('Относительный адрес'),
         unique=True,
         max_length=255,
     )
@@ -34,7 +34,7 @@ class Poll(GenericDateModel):
         verbose_name_plural = _ul('Опросы')
 
     def __str__(self):
-        return u'%s' % self.material.title
+        return u'%s' % self.question
 
 
 class PollItem(GenericDateModel):

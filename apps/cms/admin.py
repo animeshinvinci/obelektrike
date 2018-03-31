@@ -2,8 +2,16 @@ from django.contrib import admin
 
 from apps.generic.admin import GenericModelAdmin
 from apps.cms.models import (
-    Feedback, Poll, PollItem
+    SeoPage, Feedback, Poll, PollItem
 )
+
+
+@admin.register(SeoPage)
+class SeoPageInline(GenericModelAdmin):
+    model = SeoPage
+    list_display = (
+        'url',
+    )
 
 
 class PollItemInline(admin.TabularInline):
@@ -13,6 +21,13 @@ class PollItemInline(admin.TabularInline):
 @admin.register(Poll)
 class PollAdmin(GenericModelAdmin):
     inlines = (PollItemInline,)
+    list_display = (
+        'question',
+        'is_published',
+    )
+    list_editable = (
+        'is_published',
+    )
 
 
 @admin.register(Feedback)
