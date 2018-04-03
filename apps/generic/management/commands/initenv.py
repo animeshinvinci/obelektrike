@@ -9,6 +9,7 @@ class Command(BaseCommand):
         call_command('migrate', interactive=False)
         call_command('collectstatic', interactive=False)
         # call_command('compilemessages')
-        call_command('sync_comments')
+        call_command('synccomments')
+        call_command('cleancache')
         if not settings.DEBUG:
             call_command('compress')
