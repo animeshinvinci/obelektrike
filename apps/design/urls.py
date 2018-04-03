@@ -2,9 +2,10 @@ from django.urls import re_path, reverse_lazy
 from django.views.generic import RedirectView
 
 from apps.blogs import views as blogs_views
+from apps.questions import views as questions_views
 from apps.cms import views as cms_views
-from apps.generic import views as generic_views
 from apps.users import views as users_views
+from apps.design import views as design_views
 
 urlpatterns = [
     re_path(
@@ -59,6 +60,15 @@ urlpatterns = [
         name='posts-category-list'),
 
     re_path(
+        r'^questions/$',
+        questions_views.QuestionListView.as_view(),
+        name='questions-list'),
+    re_path(
+        r'^questions/create/$',
+        questions_views.QuestionCreateView.as_view(),
+        name='questions-create'),
+
+    re_path(
         r'^u/login/$',
         users_views.LoginView.as_view(),
         name='u-login'),
@@ -103,6 +113,9 @@ urlpatterns = [
         r'^u/comments/$',
         blogs_views.CommentUserListView.as_view(), name='u-comments-list'),
     re_path(
+        r'^u/questions/$',
+        questions_views.QuestionUserListView.as_view(), name='u-questions-list'),
+    re_path(
         r'^json/comment/$',
         blogs_views.comment_json,
         name='json-comment'),
@@ -145,24 +158,24 @@ urlpatterns = [
 
     re_path(
         r'^robots\.txt$',
-        generic_views.RobotTemplateView.as_view()),
+        design_views.RobotTemplateView.as_view()),
     re_path(
         r'^sitemap\.xml$',
-        generic_views.sitemap_xml),
+        design_views.sitemap_xml),
     re_path(
         r'^sitemap-(?P<section>.+)\.xml$',
-        generic_views.sitemap_xml),
+        design_views.sitemap_xml),
     re_path(
         r'^sitemap\.html$',
-        generic_views.sitemap_html,
+        design_views.sitemap_html,
         name='sitemap-html'),
     re_path(
         r'^feed\.rss$',
-        generic_views.feed,
+        design_views.feed,
         name='feed'),
 
     re_path(
         r'^u/ckeditor/upload/',
-        generic_views.ImageUploadView.as_view(),
+        design_views.ImageUploadView.as_view(),
         name='ckeditor_upload'),
 ]

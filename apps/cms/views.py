@@ -6,7 +6,7 @@ from django.views.generic import CreateView, TemplateView
 
 from apps.cms.forms import FeedbackForm
 from apps.cms.models import Feedback, PollItem
-from apps.email.utils import send_mail
+from apps.cms.utils import send_mail
 from apps.generic.mixins import MessageMixin
 
 

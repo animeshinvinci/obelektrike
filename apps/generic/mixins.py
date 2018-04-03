@@ -1,3 +1,6 @@
+from bs4 import BeautifulSoup as bs
+
+from django import forms
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _ul
 
@@ -24,3 +27,15 @@ class MessageMixin(object):
             else:
                 messages.error(self.request, _ul(u'* Ошибки ввода'), extra_tags=self.extra_tags)
         return result
+
+
+class SpamMixin(object):
+    def clean_on_spam(self, text):
+        msg = _ul(u'Система пометила Ваше сообщение как спам. Возможно Вы используете ссылки или Ваше сообщение содержит спам') # noqa
+        is_spam = False
+        soup = bs(text, "html.parser")
+        hrefs = soup.findAll('a')
+        if hrefs or 'http' in text or 'https' in text or 'www' in text:
+            is_spam = True
+        if is_spam:
+            raise forms.ValidationError(msg)

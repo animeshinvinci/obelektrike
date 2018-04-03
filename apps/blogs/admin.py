@@ -180,6 +180,7 @@ class CommentAdmin(GenericModelAdmin):
             'fields': (
                 'author',
                 'author_username',
+                'ip_address',
             )
         }),
     )

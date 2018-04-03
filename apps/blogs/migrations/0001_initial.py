@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Комментарии',
                 'ordering': ('-creation_date',),
             },
-            bases=(apps.blogs.models.CommentMixin, models.Model),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Post',
@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Статьи',
                 'ordering': ('-publication_date',),
             },
-            bases=(apps.blogs.models.PostMixin, models.Model),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Tag',

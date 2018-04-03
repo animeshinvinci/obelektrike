@@ -6,21 +6,10 @@ from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 
 from apps.blogs.models import Category, Comment, Post
-from apps.cms.models import Material
 from apps.users.models import User
 
 
 class Command(BaseCommand):
-
-    def create_cms_pages(self):
-        for material_type in getattr(settings, 'MATERIAL_TYPES', ()):
-            Material.objects.get_or_create(
-                pagetype=material_type[0],
-                defaults=dict(
-                    title=material_type[1],
-                    data='',
-                )
-            )
 
     def create_users(self):
         admin, _ = User.objects.get_or_create(username='admin@admin.com')
@@ -85,7 +74,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         call_command('initenv')
-        self.create_cms_pages()
         self.create_users()
         self.create_posts()
         self.create_comments()

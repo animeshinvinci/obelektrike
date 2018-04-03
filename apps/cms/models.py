@@ -13,8 +13,8 @@ class SeoPage(GenericSeoModel):
     )
 
     class Meta:
-        verbose_name = _ul('Страница')
-        verbose_name_plural = _ul('Страницы')
+        verbose_name = _ul('`SEO Страница')
+        verbose_name_plural = _ul('SEO Страницы')
 
     def __str__(self):
         return u'%s' % self.url
@@ -72,9 +72,15 @@ class PollItem(GenericDateModel):
 
 
 class Feedback(GenericDateModel):
-    name = models.CharField(verbose_name=_ul('Ваше имя'), max_length=255)
-    email = models.EmailField(verbose_name=_ul('Контактный email'), max_length=255)
-    message = RichTextUploadingField(verbose_name=_ul('Сообщение'), config_name='feedback')
+    name = models.CharField(
+        verbose_name = _ul('Ваше имя'),
+        max_length=255)
+    email = models.EmailField(
+        verbose_name = _ul('Контактный email'),
+        max_length=255)
+    message = RichTextUploadingField(
+        verbose_name = _ul('Сообщение'),
+        config_name='feedback')
 
     class Meta:
         verbose_name = _ul('Обратная связь')
@@ -82,3 +88,26 @@ class Feedback(GenericDateModel):
 
     def __str__(self):
         return u'%s - %s' % (self.creation_date, self.name)
+
+
+class CmsEmail(GenericDateModel):
+    from_email = models.CharField(
+        max_length=255)
+    to_emails = models.TextField()
+
+    subject = models.CharField(
+        max_length=255)
+    body = models.TextField()
+
+    def __str__(self):
+        return u'Email from "%s" to "%s" sent at %s about "%s"' % (
+            self.from_email,
+            self.to_emails,
+            self.creation_date,
+            self.subject
+        )
+
+    class Meta:
+        verbose_name = _ul('Email')
+        verbose_name_plural = _ul('Emails')
+        ordering = ['-creation_date']

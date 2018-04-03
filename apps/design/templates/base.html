@@ -118,13 +118,11 @@
                         {% endfor %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        {% comment %}
                         <li>
-                            <a href="{% url 'index' %}1/topic/add/" class="inverse">
+                            <a href="{% url 'questions-create' %}" class="inverse">
                                 <span class="fa fa-question"></span> {% trans 'Задать вопрос' %}
                             </a>
                         </li>
-                        {% endcomment %}
                         {% if request.user.is_authenticated %}
                         {% if request.user.is_staff %}
                         <li>
@@ -139,6 +137,11 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{% url 'u-questions-list' %}">
+                                        <span class="fa fa-question"></span> {% trans 'Мои вопросы на сайте' %}
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="{% url 'u-comments-list' %}">
                                         <span class="fa fa-comment"></span> {% trans 'Мои сообщения на сайте' %}
@@ -206,9 +209,7 @@
                             <a href="{% url 'posts-popular-list' %}" class="btn btn-default menu-item">{% trans 'Популярные статьи' %}</a>
                             <a href="{% url 'posts-commented-list' %}" class="btn btn-default menu-item">{% trans 'Комментируемые статьи' %}</a>
                             <a href="{% url 'posts-category-list' 'praktika' %}" class="btn btn-default menu-item">{% trans 'Практика' %}</a>
-                            {% comment %}
-                            <a href="{% url 'index' %}" class="btn btn-default menu-item">{% trans 'Бесплатная помощь' %}</a>
-                            {% endcomment %}
+                            <a href="{% url 'questions-list' %}" class="btn btn-default menu-item">{% trans 'Бесплатная помощь' %}</a>
                         </div>
                     </div>
 
@@ -288,7 +289,7 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h2 class="panel-title"><span class="fa fa-user"></span> <a href="{% url 'posts-category-list' 'voprosy' %}">БЕСПЛАТНАЯ ПОМОЩЬ</a></h2>
+                            <h2 class="panel-title"><span class="fa fa-user"></span> <a href="{% url 'questions-list' %}">БЕСПЛАТНАЯ ПОМОЩЬ</a></h2>
                         </div>
                         <div class="panel-body">
                             <ul class="media-list">

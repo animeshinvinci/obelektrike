@@ -64,7 +64,6 @@ INSTALLED_APPS += [
 INSTALLED_APPS += [
     'apps.design',
     'apps.generic',
-    'apps.email',
     'apps.users',
     'apps.cms',
     'apps.blogs',
@@ -110,7 +109,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'apps.generic.context_processors.main_context_processors',
+                'apps.design.context_processors.main_context_processors',
             ],
         },
     },

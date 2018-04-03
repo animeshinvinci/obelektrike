@@ -9,6 +9,8 @@
 
 .DS_Store
 
+sqlite.db
+
 /backup
 /media
 /static

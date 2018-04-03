@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _ul
 from django.views.generic import DetailView, FormView, RedirectView, UpdateView
 
-from apps.email.utils import send_mail
+from apps.cms.utils import send_mail
 from apps.generic.mixins import MessageMixin
 from apps.users.forms import (
     LoginForm, PasswordChangeForm, PasswordResetForm, RegistrationForm,

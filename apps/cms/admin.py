@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.generic.admin import GenericModelAdmin
 from apps.cms.models import (
-    SeoPage, Feedback, Poll, PollItem
+    SeoPage, Feedback, Poll, PollItem, CmsEmail
 )
 
 
@@ -33,3 +33,22 @@ class PollAdmin(GenericModelAdmin):
 @admin.register(Feedback)
 class FeedbackAdmin(GenericModelAdmin):
     pass
+
+
+@admin.register(CmsEmail)
+class CmsEmailAdmin(GenericModelAdmin):
+    list_display = (
+        'creation_date',
+        'from_email',
+        'to_emails',
+        'subject',
+    )
+    search_fields = (
+        'from_email',
+        'to_emails',
+        'subject',
+        'body',
+    )
+
+    def has_add_permission(self, request):
+        return False

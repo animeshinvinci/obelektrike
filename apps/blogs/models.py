@@ -9,48 +9,6 @@ from apps.generic.models import GenericDateModel, GenericSeoModel
 from apps.users.models import User
 
 
-class PostMixin(object):
-
-    def view_action(self, session):
-        if self.has_session_key(session, 'post_view', setup=True):
-            return
-        self.view_count += 1
-        self.save(update_fields=['view_count'])
-
-    def like_action(self, session):
-        if self.has_session_key(session, 'post_like', setup=True):
-            return
-        self.rate += 1
-        self.save(update_fields=['rate'])
-
-    def unlike_action(self, session):
-        if self.has_session_key(session, 'post_like', setup=True):
-            return
-        self.rate -= 1
-        self.save(update_fields=['rate'])
-
-    def post_mini_shorter(self):
-        return str(self.announcement)[:100] + "..."
-
-    def is_question(self):
-        return self.category.categorytype == Category.CATEGORY_QUESTIONS
-
-
-class CommentMixin(object):
-
-    def like_action(self, session):
-        if self.has_session_key(session, 'comment_like', setup=True):
-            return
-        self.rate += 1
-        self.save(update_fields=['rate'])
-
-    def unlike_action(self, session):
-        if self.has_session_key(session, 'comment_like', setup=True):
-            return
-        self.rate -= 1
-        self.save(update_fields=['rate'])
-
-
 class Tag(GenericDateModel):
     name = models.CharField(
         verbose_name=_ul('Имя'),
@@ -110,7 +68,7 @@ class Category(GenericSeoModel):
         return u'%s' % self.name
 
 
-class Post(PostMixin, GenericSeoModel):
+class Post(GenericSeoModel):
     category = models.ForeignKey(
         Category,
         verbose_name=_ul('Категория'),
@@ -166,11 +124,34 @@ class Post(PostMixin, GenericSeoModel):
         if self.is_published:
             return u'/posts/%s/' % self.slug
 
-    # User.objects.send_email_to_subscribers(self)
+    def view_action(self, session):
+        if self.has_session_key(session, 'post_view', setup=True):
+            return
+        self.view_count += 1
+        self.save(update_fields=['view_count'])
+
+    def like_action(self, session):
+        if self.has_session_key(session, 'post_like', setup=True):
+            return
+        self.rate += 1
+        self.save(update_fields=['rate'])
+
+    def unlike_action(self, session):
+        if self.has_session_key(session, 'post_like', setup=True):
+            return
+        self.rate -= 1
+        self.save(update_fields=['rate'])
+
+    def post_mini_shorter(self):
+        return str(self.announcement)[:100] + "..."
+
+    def is_question(self):
+        return self.category.categorytype == Category.CATEGORY_QUESTIONS
 
     def save(self, *args, **kwargs):
         if self.publication_date is None and self.is_published:
             self.publication_date = timezone.now()
+        # User.objects.send_email_to_subscribers(self)
         return super(Post, self).save(*args, **kwargs)
 
     class Meta:
@@ -182,7 +163,7 @@ class Post(PostMixin, GenericSeoModel):
         return u'%s' % self.title
 
 
-class Comment(CommentMixin, MPTTModel, GenericDateModel):
+class Comment(MPTTModel, GenericDateModel):
     parent = TreeForeignKey(
         'self',
         null=True,
@@ -219,9 +200,27 @@ class Comment(CommentMixin, MPTTModel, GenericDateModel):
         verbose_name=_ul('Кол-во лайков'),
         default=0)
 
+    ip_address = models.CharField(
+        verbose_name = _ul('IP address'),
+        max_length=255,
+        null=True,
+        blank=True)
+
     def get_absolute_url(self):
         if self.is_published and self.post.is_published:
             return self.post.get_absolute_url() + '#comment_%s' % self.pk
+
+    def like_action(self, session):
+        if self.has_session_key(session, 'comment_like', setup=True):
+            return
+        self.rate += 1
+        self.save(update_fields=['rate'])
+
+    def unlike_action(self, session):
+        if self.has_session_key(session, 'comment_like', setup=True):
+            return
+        self.rate -= 1
+        self.save(update_fields=['rate'])
 
     def save(self, *args, **kwargs):
         if self.author:

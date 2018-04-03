@@ -50,7 +50,6 @@ class PostChoicesListView(PostListView):
     is_last = False
     is_populate = False
     is_commented = False
-    is_viewed = False
 
     def get_queryset(self):
         qs = super(PostChoicesListView, self).get_queryset()

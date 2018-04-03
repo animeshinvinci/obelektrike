@@ -54,12 +54,6 @@
                             <a href="
                             {% if object.is_published %}
                                 {% url 'posts-category-detail' object.slug %}
-                            {% else %}
-                                {% if not object.is_published %}
-                                    {% url 'u-posts-detail-draft' object.slug %}
-                                {% else %}
-                                    {% url 'u-posts-detail-moderation' object.slug %}
-                                {% endif %}
                             {% endif %}
                             ">{{object.title}}</a>
                         </h2>
