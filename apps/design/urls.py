@@ -1,5 +1,7 @@
 from django.urls import re_path, reverse_lazy
 from django.views.generic import RedirectView
+from django.views.decorators.cache import cache_page
+from django.conf import settings
 
 from apps.blogs import views as blogs_views
 from apps.questions import views as questions_views
@@ -7,23 +9,30 @@ from apps.cms import views as cms_views
 from apps.users import views as users_views
 from apps.design import views as design_views
 
+
+def _c(x):
+    if settings.DEBUG:
+        return x
+    return cache_page(60 * 15)(x)
+
+
 urlpatterns = [
     re_path(
         r'^$',
-        blogs_views.IndexView.as_view(),
+        _c(blogs_views.IndexView.as_view()),
         name='index'),
 
     re_path(
         r'^poslednie-statyi/$',
-        blogs_views.PostChoicesListView.as_view(is_last=True),
+        _c(blogs_views.PostChoicesListView.as_view(is_last=True)),
         name='posts-last-list'),
     re_path(
         r'^popularnye-statyi/$',
-        blogs_views.PostChoicesListView.as_view(is_populate=True),
+        _c(blogs_views.PostChoicesListView.as_view(is_populate=True)),
         name='posts-popular-list'),
     re_path(
         r'^kommentiruemye-statyi/$',
-        blogs_views.PostChoicesListView.as_view(is_commented=True),
+        _c(blogs_views.PostChoicesListView.as_view(is_commented=True)),
         name='posts-commented-list'),
     re_path(
         r'^poisk/$',
@@ -31,37 +40,37 @@ urlpatterns = [
         name='posts-search'),
     re_path(
         r'^kontakty/$',
-        cms_views.FeedbackCreateView.as_view(),
+        _c(cms_views.FeedbackCreateView.as_view()),
         name='feedback'),
     re_path(
         r'^reklamodatelyam/$',
-        cms_views.FlatPageDetailView.as_view(
+        _c(cms_views.FlatPageDetailView.as_view(
             template_name='advertisers.html'
-        ),
+        )),
         name='advertisers'),
     re_path(
         r'^pravila-i-avtorskie-prava/$',
-        cms_views.FlatPageDetailView.as_view(
+        _c(cms_views.FlatPageDetailView.as_view(
             template_name='rules.html'
-        ),
+        )),
         name='rules'),
 
     re_path(
         r'^posts/$',
-        blogs_views.PostListView.as_view(),
+        _c(blogs_views.PostListView.as_view()),
         name='posts-list'),
     re_path(
         r'^posts/(?P<slug>[-_\w]+)/$',
-        blogs_views.PostCategoryDetailView.as_view(),
+        _c(blogs_views.PostCategoryDetailView.as_view()),
         name='posts-category-detail'),
     re_path(
         r'^category/(?P<category_slug>[-_\w]+)/$',
-        blogs_views.PostCategoryListView.as_view(),
+        _c(blogs_views.PostCategoryListView.as_view()),
         name='posts-category-list'),
 
     re_path(
         r'^questions/$',
-        questions_views.QuestionListView.as_view(),
+        _c(questions_views.QuestionListView.as_view()),
         name='questions-list'),
     re_path(
         r'^questions/create/$',

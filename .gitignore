@@ -8,6 +8,7 @@
 *.gz
 
 .DS_Store
+.env
 
 sqlite.db
 
@@ -16,3 +17,5 @@ sqlite.db
 /static
 /env
 env.prod
+
+snapshot.zip
