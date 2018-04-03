@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.core.cache import cache
 from django.utils.translation import ugettext_lazy as _ul
 from django.views.generic import DetailView, FormView, RedirectView, UpdateView
 
@@ -35,6 +36,7 @@ class LoginView(MessageMixin, FormView):
         user = form.cleaned_data['user']
         if user is not None:
             login(self.request, user)
+            cache.clear()
         return super(LoginView, self).form_valid(form)
 
 
@@ -43,6 +45,7 @@ class LogoutView(RedirectView):
 
     def get_redirect_url(self):
         logout(self.request)
+        cache.clear()
         next_url = self.request.GET.get('next', None)
         if next_url is not None:
             return next_url
