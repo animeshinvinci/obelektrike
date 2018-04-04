@@ -48,10 +48,10 @@
 
         {% block css_extra %}
         {% endblock %}
-        
+
         {% if not DEBUG %}
-        <script type="text/javascript"> 
-        (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter28146531 = new Ya.Metrika({ id:28146531, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); 
+        <script type="text/javascript">
+        (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter28146531 = new Ya.Metrika({ id:28146531, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");
         </script>
         <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -68,7 +68,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 logo">
-                        <a href="{% url 'index' %}"><img class="media-object logo-header pull-left" src="{% static 'site/img/logo-header.png' %}" width="350" height="80" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+                        <h1>
+                            <a href="{% url 'index' %}"><img class="media-object logo-header pull-left" src="{% static 'site/img/logo-header.png' %}" width="350" height="80" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+                        </h1>
                     </div>
                     <div class="col-lg-4">
                         <img class="top-image" src="{% static 'site/img/lamp.png' %}">
@@ -158,9 +160,15 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{% url 'u-logout' %}">
-                                        <span class="fa fa-sign-in"></span> {% trans 'Выйти' %}
-                                    </a>
+                                    <form method='POST' action="{% url 'u-logout' %}">
+                                        {% csrf_token %}
+                                        <button
+                                            type="submit"
+                                            style="border-width:0px; color:#2491d0; text-decoration:underline; margin-left: 14px;"
+                                        >
+                                            <span class="fa fa-sign-in"></span> {% trans 'Выйти' %}
+                                        </button>
+                                    </form>
                                 </li>
                             </ul>
                         </li>
@@ -353,7 +361,7 @@
                   <br>
                   © {% now "Y" %} {{domain}} - {% trans 'лучший интернет-портал об электрике в домашних условиях' %}
                   <br>
-                  {% trans 'для связи' %} <a href="mailto:support@obelektrike.ru">support@obelektrike.ru</a> 
+                  {% trans 'для связи' %} <a href="mailto:support@obelektrike.ru">support@obelektrike.ru</a>
                 </div>
                 <div class="col-lg-4">
                   {% trans 'Все текстовые и графические материалы, размещенные на сайте, являются собственностью редакции. Копирование их допускается только при использовании активной ссылки на этот сайт.' %}
@@ -363,7 +371,6 @@
                     {% if not DEBUG %}
                     <!--LiveInternet counter-->
                     <script type="text/javascript">
-                    <!--
                     document.write("<a href='//www.liveinternet.ru/click' "+
                     "target=_blank><img src='//counter.yadro.ru/hit?t14.1;r"+
                     escape(document.referrer)+((typeof(screen)=="undefined")?"":
@@ -373,7 +380,6 @@
                     "' alt='' title='LiveInternet: показано число просмотров за 24"+
                     " часа, посетителей за 24 часа и за сегодня' "+
                     "border='0' width='88' height='31'><\/a>")
-                    //-->
                     </script>
                     <!--/LiveInternet-->
                     {% endif %}
@@ -387,14 +393,14 @@
         </div>
 
         {{ form.media }}
-        
+
         <script type="text/javascript">
-          var likePostUrl = "{% url 'json-post-like' %}";
-          var unlikePostUrl = "{% url 'json-post-unlike' %}";
-          var likeCommentUrl = "{% url 'json-comment-like' %}";
-          var unlikeCommentUrl = "{% url 'json-comment-unlike' %}";
-          var voteUrl = "{% url 'json-cms-vote' %}";
-          var isUserAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+          const likePostUrl = "{% url 'json-post-like' %}";
+          const unlikePostUrl = "{% url 'json-post-unlike' %}";
+          const likeCommentUrl = "{% url 'json-comment-like' %}";
+          const unlikeCommentUrl = "{% url 'json-comment-unlike' %}";
+          const voteUrl = "{% url 'json-cms-vote' %}";
+          const isUserAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
         </script>
 
         {% compress js %}
