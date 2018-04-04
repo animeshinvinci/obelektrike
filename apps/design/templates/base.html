@@ -68,7 +68,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 logo">
-                        <a href="{% url 'index' %}"><img class="media-object logo-header pull-left" src="{% static 'site/img/logo-header.png' %}" width="350" height="80" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+                        <a href="{% url 'index' %}">
+						{% thumbnail "http://"|add:request.get_host|add:"/static/site/img/logo-header.png" "350x80" format="PNG" as im %}
+						<img class="media-object logo-header pull-left" src="{{ im.url }}" width="350" height="80" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+						{% empty %}
+						<img class="media-object logo-header pull-left" src="{% static 'site/img/logo-header.png' %}" width="350" height="80" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+						{% endthumbnail %}
                     </div>
                     <div class="col-lg-4">
                         <img class="top-image" src="{% static 'site/img/lamp.png' %}">
@@ -97,7 +102,13 @@
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <a href="{% url 'index' %}" class="navbar-mob"><img src="{% static 'site/img/logo-header.png' %}" width="230" height="60" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}"></a>
+                    <a href="{% url 'index' %}" class="navbar-mob">
+					{% thumbnail "http://"|add:request.get_host|add:"/static/site/img/logo-header.png" "230x60" format="PNG" as im %}
+					<img src="{{ im.url }}" width="230" height="60" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}">
+					{% empty %}
+					<img src="{% static 'site/img/logo-header.png' %}" width="230" height="60" alt="{% trans 'Электропроводка в доме и квартире своими руками' %}">
+					{% endthumbnail %}
+					</a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-header">
                         <span class="sr-only"></span>
                         <span class="icon-bar"></span>
@@ -349,7 +360,11 @@
             <div class="container">
               <div class="row">
                 <div class="col-lg-4">
+					{% thumbnail "http://"|add:request.get_host|add:"/static/site/img/logo-footer.png" "80x80" format="PNG" as im %}
+					<img class="media-object logo-footer pull-left" src="{{ im.url }}" width="80" height="80"  alt="{% trans 'Электропроводка в доме и квартире своими руками' %}">
+					{% empty %}
                   <img class="media-object logo-footer pull-left" src="{% static 'site/img/logo-footer.png' %}" width="80" height="80"  alt="{% trans 'Электропроводка в доме и квартире своими руками' %}">
+					{% endthumbnail %}
                   <br>
                   © {% now "Y" %} {{domain}} - {% trans 'лучший интернет-портал об электрике в домашних условиях' %}
                   <br>

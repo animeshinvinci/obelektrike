@@ -1,11 +1,17 @@
 {% load i18n %}
+{% load sorl_thumbnail %}
 
 <div class="media-body">
     {% if node.author %}
-    <img class="media-object" src="{{node.author.avatar.url}}" alt="{{node.author.get_full_name}}" width="70" height="70">
+		{% thumbnail node.author.avatar "50x50" as im %}
+			<img class="media-object" src="{{ im.url }}" alt="{{ node.author.get_full_name }}" width="70" height="70">
+		{% endthumbnail %}
     {% else %}
-    <img class="media-object" src="/media/defaults/user.jpeg" alt="Аватар пользователя" width="70" height="70">
+		{% thumbnail "http://"|add:request.get_host|add:"/media/defaults/user.jpeg" "50x50" as im %}
+		<img class="media-object" src="{{ im.url }}" alt="Аватар пользователя" width="70" height="70">
+		{% endthumbnail %}
     {% endif %}
+
     {% include "comment-header.html" with object=node %}
     {% if not node.is_deleted %}
         {{node.comment|safe}}
